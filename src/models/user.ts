@@ -23,24 +23,16 @@ export const createUser = async (username: string, age: number, hobbies: string[
     return newUser;
 };
 
-export const updateUser = async (id: string, username?: string, age?: number, hobbies?: string[]) => {
+export const updateUser = async (id: string, username: string, age: number, hobbies: string[]) => {
     const user = await getUserById(id);
 
     if (!user) {
         return null;
     }
 
-    if (username) {
-        user.username = username;
-    }
-
-    if (age) {
-        user.age = age;
-    }
-
-    if (hobbies) {
-        user.hobbies = hobbies;
-    }
+    user.username = username;
+    user.age = age;
+    user.hobbies = hobbies;
     
     return user;
 };
