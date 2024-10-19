@@ -1,5 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'node:http';
-import { addUser, getAllUsers, getUser, modifyUser } from '../controllers/userController';
+import { addUser, getAllUsers, getUser, modifyUser, removeUser } from '../controllers/userController';
 
 export const handleUsersRequest = async (req: IncomingMessage, res: ServerResponse ): Promise<void> => {
     const { method, url } = req;
@@ -30,6 +30,13 @@ export const handleUsersRequest = async (req: IncomingMessage, res: ServerRespon
         case 'PUT':
             if (url?.startsWith('/api/users/')) {
                 await modifyUser(req, res);
+
+                return;
+            }
+
+        case 'DELETE':
+            if (url?.startsWith('/api/users/')) {
+                await removeUser(req, res);
 
                 return;
             } 

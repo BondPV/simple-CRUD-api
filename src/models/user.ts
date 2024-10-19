@@ -37,7 +37,7 @@ export const updateUser = async (id: string, username: string, age: number, hobb
     return user;
 };
 
-export const deleteUser = async (id: string) => {
+export const deleteUser = async (id: string): Promise<boolean> => {
     const index = users.findIndex(user => user.id === id);
 
     if (index !== -1) {

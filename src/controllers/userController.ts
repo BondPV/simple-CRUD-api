@@ -1,5 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { createUser, getUserById, getUsers, updateUser, UserWithoutIdType } from '../models/user';
+import { createUser, deleteUser, getUserById, getUsers, updateUser, UserWithoutIdType } from '../models/user';
 import { validate } from 'uuid';
 
 export const getAllUsers = async (_req: IncomingMessage, res: ServerResponse): Promise<void> => {
@@ -104,4 +104,26 @@ export const modifyUser = async (req: IncomingMessage, res: ServerResponse): Pro
             res.end(JSON.stringify({ error: 'Invalid request' }));
         }
     });
+};
+
+export const removeUser = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
+    const userId = req.url?.split('/')[3] || '';
+    const isIdValid = validate(userId);
+
+    if (!userId || !isIdValid) {
+        res.statusCode = 400;
+        res.end(JSON.stringify({ message: 'User ID is invalid (not uuid)' }));
+        
+        return;
+    }
+
+    const isDeleteUser = await deleteUser(userId);
+
+    if (isDeleteUser) {
+        res.statusCode = 204;
+        res.end();
+    } else {
+        res.statusCode = 404;
+        res.end(JSON.stringify({ error: 'User not found' }));
+    }
 };
