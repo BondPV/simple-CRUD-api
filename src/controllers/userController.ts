@@ -46,7 +46,7 @@ export const addUser = async (req: IncomingMessage, res: ServerResponse): Promis
 
             if (!username || !age || !Array.isArray(hobbies)) {
                 res.statusCode = 400;
-                res.end(JSON.stringify({ error: 'Invalid request. Missing required fields' }));
+                res.end(JSON.stringify({ message: 'Invalid request. Missing required fields' }));
 
                 return;
             }
@@ -57,7 +57,7 @@ export const addUser = async (req: IncomingMessage, res: ServerResponse): Promis
             res.end(JSON.stringify(newUser));
         } catch (error) {
             res.statusCode = 400;
-            res.end(JSON.stringify({ error: 'Invalid request' }));
+            res.end(JSON.stringify({ massage: 'Invalid request' }));
         }
     });
 };
@@ -85,7 +85,7 @@ export const modifyUser = async (req: IncomingMessage, res: ServerResponse): Pro
 
             if (!username || !age || !Array.isArray(hobbies)) {
                 res.statusCode = 400;
-                res.end(JSON.stringify({ error: 'Invalid request. Missing required fields' }));
+                res.end(JSON.stringify({ message: 'Invalid request. Missing required fields' }));
 
                 return;
             }
@@ -97,11 +97,11 @@ export const modifyUser = async (req: IncomingMessage, res: ServerResponse): Pro
                 res.end(JSON.stringify(updatedUser));
             } else {
                 res.statusCode = 404;
-                res.end(JSON.stringify({ error: 'User not found' }));
+                res.end(JSON.stringify({ message: 'User not found' }));
             }
         } catch (error) {
             res.statusCode = 400;
-            res.end(JSON.stringify({ error: 'Invalid request' }));
+            res.end(JSON.stringify({ message: 'Invalid request' }));
         }
     });
 };
@@ -124,6 +124,6 @@ export const removeUser = async (req: IncomingMessage, res: ServerResponse): Pro
         res.end();
     } else {
         res.statusCode = 404;
-        res.end(JSON.stringify({ error: 'User not found' }));
+        res.end(JSON.stringify({ message: 'User not found' }));
     }
 };

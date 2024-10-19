@@ -42,7 +42,7 @@ export const handleUsersRequest = async (req: IncomingMessage, res: ServerRespon
             } 
 
         default:
-            res.statusCode = 404;
-            res.end(JSON.stringify({ message: 'Not Found' }));
+            res.statusCode = 405;
+            res.end(JSON.stringify({ message: 'Method not allowed' }));
     }
 };
