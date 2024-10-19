@@ -1,6 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'node:http';
-import { parse } from 'node:url';
-import { getAllUsers, getUser } from '../controllers/userController';
+import { addUser, getAllUsers, getUser } from '../controllers/userController';
 
 export const handleUsersRequest = async (req: IncomingMessage, res: ServerResponse ): Promise<void> => {
     const { method, url } = req;
@@ -21,13 +20,15 @@ export const handleUsersRequest = async (req: IncomingMessage, res: ServerRespon
                 return;
             }
 
-            res.statusCode = 404;
-            res.end(JSON.stringify({ message: 'Not Found' }));
+        case 'POST':
+            if (url === '/api/users') {
+                await addUser(req, res);
 
-            return;
+                return;
+            } 
 
         default:
-            res.statusCode = 405;
-            res.end(JSON.stringify({ message: 'Method Not Allowed' }));
+            res.statusCode = 404;
+            res.end(JSON.stringify({ message: 'Not Found' }));
     }
 };

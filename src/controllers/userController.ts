@@ -1,5 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { getUserById, getUsers } from '../models/user';
+import { createUser, getUserById, getUsers, UserWithoutIdType } from '../models/user';
 import { validate } from 'uuid';
 
 export const getAllUsers = async (_req: IncomingMessage, res: ServerResponse): Promise<void> => {
@@ -31,4 +31,33 @@ export const getUser = async (req: IncomingMessage, res: ServerResponse): Promis
 
     res.statusCode = 200;
     res.end(JSON.stringify(user));
+};
+
+export const addUser = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
+    let body = '';
+
+    req.on('data', (chunk) => {
+        body += chunk.toString();
+    });
+
+    req.on('end', async () => {
+        try {
+            const { username, age, hobbies }: UserWithoutIdType = JSON.parse(body);
+
+            if (!username || !age || !Array.isArray(hobbies)) {
+                res.statusCode = 400;
+                res.end(JSON.stringify({ error: 'Invalid request. Missing required fields' }));
+
+                return;
+            }
+
+            const newUser = await createUser(username, age, hobbies);
+
+            res.statusCode = 201;
+            res.end(JSON.stringify(newUser));
+        } catch (error) {
+            res.statusCode = 400;
+            res.end(JSON.stringify({ error: 'Invalid request' }));
+        }
+    });
 };

@@ -7,6 +7,8 @@ export interface IUser {
     hobbies: string[] | [];
 }
 
+export type UserWithoutIdType = Omit<IUser, 'id'>;
+
 const users: IUser[] = [];
 
 export const getUsers = async () => users;
