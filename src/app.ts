@@ -1,10 +1,8 @@
 import { IncomingMessage, ServerResponse } from 'node:http';
+import { handleUsersRequest } from './routes/userRoutes';
 
 const requestListener = (req: IncomingMessage, res: ServerResponse) => {
-    res.setHeader('Content-Type', 'application/json');
-
-    res.writeHead(404);
-    res.end(JSON.stringify({ message: 'Not Found' }));
+    handleUsersRequest(req, res)
 };
 
 export default requestListener;

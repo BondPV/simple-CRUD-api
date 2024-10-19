@@ -11,3 +11,7 @@ const server = createServer(requestListener);
 server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+server.on('error', (error: Error) => {
+    console.error(`Server failed to start: ${error.message}`);
+});

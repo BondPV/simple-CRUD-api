@@ -9,11 +9,11 @@ export interface IUser {
 
 const users: IUser[] = [];
 
-export const getUsers = () => users;
+export const getUsers = async () => users;
 
-export const getUserById = (id: string) => users.find(user => user.id === id);
+export const getUserById = async (id: string) => users.find(user => user.id === id);
 
-export const createUser = (username: string, age: number, hobbies: string[]) => {
+export const createUser = async (username: string, age: number, hobbies: string[]) => {
     const newUser: IUser = { id: uuidv4(), username, age, hobbies };
 
     users.push(newUser);
@@ -21,8 +21,8 @@ export const createUser = (username: string, age: number, hobbies: string[]) => 
     return newUser;
 };
 
-export const updateUser = (id: string, username?: string, age?: number, hobbies?: string[]) => {
-    const user = getUserById(id);
+export const updateUser = async (id: string, username?: string, age?: number, hobbies?: string[]) => {
+    const user = await getUserById(id);
 
     if (!user) {
         return null;
@@ -43,7 +43,7 @@ export const updateUser = (id: string, username?: string, age?: number, hobbies?
     return user;
 };
 
-export const deleteUser = (id: string) => {
+export const deleteUser = async (id: string) => {
     const index = users.findIndex(user => user.id === id);
 
     if (index !== -1) {
