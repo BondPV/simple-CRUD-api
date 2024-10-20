@@ -2,10 +2,11 @@ import dotenv from 'dotenv';
 import cluster from 'node:cluster';
 import { createServer } from 'node:http';
 import os from 'node:os';
-import requestListener from './routes/routes';
-import { createBalancer, handleWorkerDataRequest } from './balancer';
 import { fork } from 'node:child_process';
 import { resolve } from 'node:path';
+import requestListener from './routes/routes';
+import { createBalancer, handleWorkerDataRequest } from './balancer';
+import { logMessage, LogTypeEnum } from './utils';
 
 const dataBaseServer = resolve(__dirname, './dbServer.ts');
 
@@ -18,13 +19,15 @@ const WORKERS_COUNT = os.cpus().length - 1;
 const server = createServer(async (req, res) => {
     if (USE_BALANCER && cluster.isWorker) {
         await handleWorkerDataRequest(req, res, 3000);
-    } else {
-        requestListener(req, res);
+
+        return;
     }
+
+    requestListener(req, res);
 });
 
 server.on('error', (error: Error) => {
-    console.error(`⚠️ Server failed to start: ${error.message}`);
+    logMessage(LogTypeEnum.warning, `Server failed to start: ${error.message}`);
 });
 
 if (USE_BALANCER) {
@@ -35,24 +38,22 @@ if (USE_BALANCER) {
 
         for (let i = 0; i < WORKERS_COUNT; i++) {
             const worker = cluster.fork();
-            console.log(`🚀 Worker process ${worker.id} started`);
+            logMessage(LogTypeEnum.run, `Worker process ${worker.id} started`);
         }
 
         fork(dataBaseServer);
 
         cluster.on("exit", (worker) => {
-            console.log(`🔴 Worker process ${worker.id} exited`);
+            logMessage(LogTypeEnum.exit, `Worker process ${worker.id} exited`);
         });
     } else if (cluster.worker) {
         const workerId = cluster.worker.id;
         const workerPort = PORT + workerId;
 
-        server.listen(workerPort, () =>
-            console.log(`✅ Worker process ${workerId} is running on http://localhost:${workerPort}`)
-        );
+        server.listen(workerPort);
     };
 } else {
     server.listen(PORT, () => {
-        console.log(`🌐 Server is running on http://localhost:${PORT}`);
+        logMessage(LogTypeEnum.server, `Server is running on http://localhost:${PORT}`);
     });
 }

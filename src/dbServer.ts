@@ -1,13 +1,14 @@
 import { createServer } from 'http';
 import requestListener from './routes/routes';
+import { logMessage, LogTypeEnum } from './utils';
 
 const DB_PORT = 3000;
 const dataBaseServer = createServer(requestListener);
 
 dataBaseServer.on('error', (error: Error) => {
-    console.error(`⚠️ Data base server failed to start: ${error.message}`);
+    logMessage(LogTypeEnum.warning,`Data base server failed to start: ${error.message}`);
 });
 
 dataBaseServer.listen(DB_PORT, () => {
-    console.log(`🎉 Data base server running on port http://localhost:${DB_PORT}`);
+    logMessage(LogTypeEnum.success, `Data base server running on port http://localhost:${DB_PORT}`);
 });
