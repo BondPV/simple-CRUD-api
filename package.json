@@ -5,9 +5,10 @@
   "main": "server.ts",
   "scripts": {
     "start:dev": "npx nodemon",
-    "build": "webpack --config webpack.config.ts",
-    "start": "node dist/server.js",
-    "start:prod": "cross-env NODE_ENV=production npm run build && npm start",
+    "start:multi": "cross-env BALANCER=true npx nodemon",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.config.ts",
+    "start": "node dist/bundle.js",
+    "start:prod": "npm run build && npm start",
     "test": "jest"
   },
   "author": "BondPV",

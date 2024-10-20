@@ -1,15 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
-
-export interface IUser {
-    id: string;
-    username: string;
-    age: number;
-    hobbies: string[] | [];
-}
+import { IUser, users } from '../db/db';
 
 export type UserWithoutIdType = Omit<IUser, 'id'>;
-
-const users: IUser[] = [];
 
 export const getUsers = async () => users;
 

@@ -5,7 +5,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 const config: Configuration = {
     mode: isProduction ? 'production' : 'development',
-    entry: './src/server.ts',
+    entry: './src/index.ts',
     target: 'node',
     module: {
         rules: [
@@ -20,7 +20,7 @@ const config: Configuration = {
         extensions: ['.ts', '.js'],
     },
     output: {
-        filename: 'server.js',
+        filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
     },
     optimization: isProduction ? {

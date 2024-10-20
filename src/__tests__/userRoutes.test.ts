@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { createServer } from 'node:http';
-import requestListener from '../app';
+import requestListener from '../routes/routes';
 
 const PORT = 4000;
 const server = createServer(requestListener);
