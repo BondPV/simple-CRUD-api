@@ -1,15 +1,13 @@
 export enum LogTypeEnum {
-    info = '🎉',
-    success = '✅',
-    warning = '⚠️',
     error = '❌',
     exit = '🔴',
-    master = '💻',
+    success = '✅',
     run = '🚀',
+    master = '💻',
     server = '🌐',
     update = '🔄',
-} ;
+    warning = '⚠️',
+}
 
-export const logMessage = (type: LogTypeEnum, message: string, object?: unknown) => {
-    object ?  console.log(`${type} ${message}`, object) : console.log(`${type} ${message}`);
-};
+export const logMessage = (type: LogTypeEnum, message: string, object?: unknown): void =>
+    object ? console.log(`${type} ${message}`, object) : console.log(`${type} ${message}`);

@@ -16,19 +16,19 @@ npm install
 
 Launches the development version of the API with nodemon for automatic reloading on file changes.
 ``` bash
-start:dev
+npm run start:dev
 ```
 Compiles TypeScript files into the dist folder for production and runs them with Node.js.
 ``` bash
-start:prod:
+npm run start:prod:
 ```
 Starts a multi-threaded server using Node.js Cluster API, balancing load across instances.
 ```bash
-start:multi
+npm run start:multi
 ```
 Runs tests using Jest.
 ```bash
-test
+npm run test
 ```
 
 ## Details

@@ -6,9 +6,9 @@ const DB_PORT = 3000;
 const dataBaseServer = createServer(requestListener);
 
 dataBaseServer.on('error', (error: Error) => {
-    logMessage(LogTypeEnum.warning,`Data base server failed to start: ${error.message}`);
+    logMessage(LogTypeEnum.warning, `Data base server failed to start: ${error.message}`);
 });
 
 dataBaseServer.listen(DB_PORT, () => {
-    logMessage(LogTypeEnum.success, `Data base server running on port http://localhost:${DB_PORT}`);
+    logMessage(LogTypeEnum.success, `DataBase server running on port http://localhost:${DB_PORT}`);
 });

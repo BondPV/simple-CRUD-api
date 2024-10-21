@@ -1,6 +1,6 @@
-import { IncomingMessage, ServerResponse } from 'http';
-import { createUser, deleteUser, getUserById, getUsers, updateUser, UserWithoutIdType } from '../models/user';
 import { validate } from 'uuid';
+import { IncomingMessage, ServerResponse } from 'node:http';
+import { createUser, deleteUser, getUserById, getUsers, updateUser, UserWithoutIdType } from '../models/user';
 
 export const getAllUsers = async (_req: IncomingMessage, res: ServerResponse): Promise<void> => {
     const allUsers = await getUsers();
@@ -12,11 +12,11 @@ export const getAllUsers = async (_req: IncomingMessage, res: ServerResponse): P
 export const getUser = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
     const userId = req.url?.split('/')[3] || '';
     const isIdValid = validate(userId);
-    
+
     if (!userId || !isIdValid) {
         res.statusCode = 400;
         res.end(JSON.stringify({ message: 'User ID is invalid (not uuid)' }));
-        
+
         return;
     }
 
@@ -25,7 +25,7 @@ export const getUser = async (req: IncomingMessage, res: ServerResponse): Promis
     if (!user) {
         res.statusCode = 404;
         res.end(JSON.stringify({ message: 'User not found' }));
-    
+
         return;
     }
 
@@ -36,7 +36,7 @@ export const getUser = async (req: IncomingMessage, res: ServerResponse): Promis
 export const addUser = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
     let body = '';
 
-    req.on('data', (chunk) => {
+    req.on('data', chunk => {
         body += chunk.toString();
     });
 
@@ -55,7 +55,7 @@ export const addUser = async (req: IncomingMessage, res: ServerResponse): Promis
 
             res.statusCode = 201;
             res.end(JSON.stringify(newUser));
-        } catch (error) {
+        } catch {
             res.statusCode = 400;
             res.end(JSON.stringify({ massage: 'Invalid request' }));
         }
@@ -69,13 +69,13 @@ export const modifyUser = async (req: IncomingMessage, res: ServerResponse): Pro
     if (!userId || !isIdValid) {
         res.statusCode = 400;
         res.end(JSON.stringify({ message: 'User ID is invalid (not uuid)' }));
-        
+
         return;
     }
 
     let body = '';
 
-    req.on('data', (chunk) => {
+    req.on('data', chunk => {
         body += chunk.toString();
     });
 
@@ -99,7 +99,7 @@ export const modifyUser = async (req: IncomingMessage, res: ServerResponse): Pro
                 res.statusCode = 404;
                 res.end(JSON.stringify({ message: 'User not found' }));
             }
-        } catch (error) {
+        } catch {
             res.statusCode = 400;
             res.end(JSON.stringify({ message: 'Invalid request' }));
         }
@@ -113,7 +113,7 @@ export const removeUser = async (req: IncomingMessage, res: ServerResponse): Pro
     if (!userId || !isIdValid) {
         res.statusCode = 400;
         res.end(JSON.stringify({ message: 'User ID is invalid (not uuid)' }));
-        
+
         return;
     }
 

@@ -1,11 +1,11 @@
-import dotenv from 'dotenv';
+import { fork } from 'node:child_process';
 import cluster from 'node:cluster';
 import { createServer } from 'node:http';
 import os from 'node:os';
-import { fork } from 'node:child_process';
 import { resolve } from 'node:path';
-import requestListener from './routes/routes';
+import dotenv from 'dotenv';
 import { createBalancer, handleWorkerDataRequest } from './balancer';
+import requestListener from './routes/routes';
 import { logMessage, LogTypeEnum } from './utils';
 
 const dataBaseServer = resolve(__dirname, './dbServer.ts');
@@ -23,16 +23,16 @@ const server = createServer(async (req, res) => {
         return;
     }
 
-    requestListener(req, res);
+    await requestListener(req, res);
 });
 
 server.on('error', (error: Error) => {
-    logMessage(LogTypeEnum.warning, `Server failed to start: ${error.message}`);
+    logMessage(LogTypeEnum.error, `Server failed to start: ${error.message}`);
 });
 
 if (USE_BALANCER) {
     if (cluster.isPrimary) {
-        console.log(`💻 Master process started with ${WORKERS_COUNT} worker processes`);
+        logMessage(LogTypeEnum.master, `Master process started with ${WORKERS_COUNT} worker processes`);
 
         createBalancer(PORT, WORKERS_COUNT);
 
@@ -43,7 +43,7 @@ if (USE_BALANCER) {
 
         fork(dataBaseServer);
 
-        cluster.on("exit", (worker) => {
+        cluster.on('exit', worker => {
             logMessage(LogTypeEnum.exit, `Worker process ${worker.id} exited`);
         });
     } else if (cluster.worker) {
@@ -51,7 +51,7 @@ if (USE_BALANCER) {
         const workerPort = PORT + workerId;
 
         server.listen(workerPort);
-    };
+    }
 } else {
     server.listen(PORT, () => {
         logMessage(LogTypeEnum.server, `Server is running on http://localhost:${PORT}`);

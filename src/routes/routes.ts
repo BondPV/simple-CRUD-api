@@ -1,17 +1,17 @@
 import { IncomingMessage, ServerResponse } from 'node:http';
-import { handleUsersRequest } from './userRoutes';
 import { logMessage, LogTypeEnum } from '../utils';
+import { handleUsersRequest } from './userRoutes';
 
-const requestListener = (req: IncomingMessage, res: ServerResponse) => {
+const requestListener = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
     try {
         const { url } = req;
 
         if (url?.startsWith('/api/users')) {
-            handleUsersRequest(req, res);
+            await handleUsersRequest(req, res);
 
             return;
-        };
-        
+        }
+
         res.writeHead(404, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: 'Endpoint not found' }));
     } catch (error) {
